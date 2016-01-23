@@ -21,13 +21,21 @@ class UserProfile(BaseModel):
 
 
 class Project(BaseModel):
-    author = models.ForeignKey(User)
-    coauthors = models.ManyToManyField(User, related_name='coauthors_user')
     description = models.TextField()
     end_date = models.DateField()
-    members = models.ManyToManyField(User, related_name='members_user')
+    members = models.ManyToManyField(
+        User,
+        through='ProjectMember',
+        through_fields=('project', 'user'),
+    )
     name = models.TextField()
     start_date = models.DateField()
+
+
+class ProjectMember(BaseModel):
+    project = models.ForeignKey(Project, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    is_author = models.BooleanField(" Is author of project?", default=False)
 
 
 class Task(BaseModel):
@@ -62,5 +70,5 @@ class ChangeDetail(BaseModel):
 
 class Comment(BaseModel):
     author = models.ForeignKey(User)
+    task = models.ForeignKey(Task)
     text = models.TextField()
-
