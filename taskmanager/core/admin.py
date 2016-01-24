@@ -4,12 +4,40 @@ from django.contrib.admin.sites import AlreadyRegistered
 
 from .models import *
 
-admin.site.register(Change)
-admin.site.register(ChangeDetail)
-admin.site.register(Comment)
-admin.site.register(Project)
-admin.site.register(ProjectMember)
-admin.site.register(Role)
-admin.site.register(Task)
-admin.site.register(UserProfile)
 
+class ChangeAdmin(admin.ModelAdmin):
+    list_display = ('modified_date',)
+    search_fields = []
+
+class ChangeDetailAdmin(admin.ModelAdmin):
+    list_display = ('modified_date',)
+
+
+class CommentAdmin(admin.ModelAdmin):
+    list_display = ('text',)
+
+
+class ProjectAdmin(admin.ModelAdmin):
+    list_display = ('name',)
+    search_fields = ['name']
+
+
+class ProjectMemberAdmin(admin.ModelAdmin):
+    list_display = ('get_user_login', 'get_project_name')
+
+
+class RoleAdmin(admin.ModelAdmin):
+    list_display = ('name',)
+
+
+class TaskAdmin(admin.ModelAdmin):
+    list_display = ('title',)
+
+admin.site.register(Change, ChangeAdmin)
+admin.site.register(ChangeDetail, ChangeDetailAdmin)
+admin.site.register(Comment, CommentAdmin)
+admin.site.register(Project, ProjectAdmin)
+admin.site.register(ProjectMember, ProjectMemberAdmin)
+admin.site.register(Role, RoleAdmin)
+admin.site.register(Task, TaskAdmin)
+admin.site.register(UserProfile)

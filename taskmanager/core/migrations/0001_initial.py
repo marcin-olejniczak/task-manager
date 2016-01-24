@@ -104,7 +104,7 @@ class Migration(migrations.Migration):
                 ('priority', models.CharField(default=1, max_length=30, choices=[(0, b'Low'), (1, b'Normal'), (2, b'High'), (3, b'Urgent')])),
                 ('start_date', models.DateField()),
                 ('title', models.TextField()),
-                ('assignee', models.ForeignKey(related_name='assigne_user', to=settings.AUTH_USER_MODEL)),
+                ('assignee', models.ForeignKey(related_name='assignee_user', to=settings.AUTH_USER_MODEL)),
                 ('author', models.ForeignKey(to=settings.AUTH_USER_MODEL)),
                 ('project', models.ForeignKey(to='core.Project')),
             ],
