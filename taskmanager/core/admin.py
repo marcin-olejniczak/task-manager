@@ -9,6 +9,7 @@ class ChangeAdmin(admin.ModelAdmin):
     list_display = ('modified_date',)
     search_fields = []
 
+
 class ChangeDetailAdmin(admin.ModelAdmin):
     list_display = ('modified_date',)
 
