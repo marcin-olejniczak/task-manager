@@ -9,6 +9,9 @@
                     <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
                     Task Manager
                 </h2>
+                {% if alert %}
+                    <div class="alert alert-danger" role="alert">{{ alert }}</div>
+                {% endif %}
                 {% crispy login_form %}
             </div>
         </div>
