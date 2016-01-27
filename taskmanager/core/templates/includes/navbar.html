@@ -11,10 +11,10 @@
     </div>
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav navbar-right">
-        <li>
-            <a href="#">
+        <li class="{% if active_tab == 'home' %}active{% endif %}">
+            <a href="/">
                 <span class="glyphicon glyphicon-dashboard"></span>
-                Dashboard
+                Home
             </a>
         </li>
         <li>

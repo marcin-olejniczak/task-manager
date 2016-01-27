@@ -38,8 +38,21 @@ def logout_user(request):
 
 @login_required
 def home(request):
+    task1 = {
+        'title': 'Something very important',
+        'author': 'John K',
+        'description': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed bibendum a dui vel accumsan. Sed vel purus et nunc vehicula ultrices. Duis blandit enim eu nibh euismod varius. Praesent ac quam eros. Maecenas mauris dolor, congue sed arcu quis, pellentesque malesuada turpis. Fusce ut finibus orci. ',
+        'priority': 'normal',
+        'end_date': '2016-01-27',
+    }
+    tasks = [task1, task1, task1, task1, task1]
+    projects = ['Project 1', 'Project 2', 'Project 3', 'Project 4', 'Project 5',]
     return render_to_response(
         'home.html',
-        {},
+        {
+            'tasks': tasks,
+            'projects': projects,
+            'active_tab': 'home',
+        },
         context_instance=RequestContext(request),
     )

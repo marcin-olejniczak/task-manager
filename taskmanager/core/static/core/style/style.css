@@ -1,0 +1,7 @@
+#tasks_short_list .list-group-item-text {
+  max-height: 40px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden; }
+
+/*# sourceMappingURL=style.css.map */

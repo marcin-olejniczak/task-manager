@@ -1,0 +1,17 @@
+
+<div class="list-group">
+{% for item in items %}
+    <a href="#" class="list-group-item">
+        <h4 class="list-group-item-heading">{{ item.title }}</h4>
+        <p class="list-group-item-text">{{ item.description }}</p>
+        <div class="row">
+            <ul class="list-inline col-md-12">
+                <li class="col-md-6"><em>Priority:</em></li>
+                <li class="col-md-6"><em>Author:</em></li>
+                <li class="col-md-6"><em>End Date:</em></li>
+                <li class="col-md-6"><em>Project:</em></li>
+            </ul>
+        </div>
+    </a>
+{% endfor %}
+</div>
