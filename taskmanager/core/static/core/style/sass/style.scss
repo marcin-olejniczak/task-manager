@@ -1,8 +1,15 @@
-#tasks_short_list {
+.dash_short_list {
   .list-group-item-text {
     max-height: 40px;
     white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
   }
+  .item-properties{
+    margin-top:5px;
+  }
+}
+#activity_chart{
+  overflow: auto;
+  overflow-y: hidden;
 }
