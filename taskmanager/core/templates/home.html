@@ -9,25 +9,25 @@
                         Overview <span class="sr-only">(current)</span>
                     </a>
                 </li>
-                <li><a href="#">My Tasks</a></li>
-                <li><a href="#">My Projects</a></li>
-                <li><a href="#">Reports</a></li>
+                <li><a href="#mytasks">My Tasks</a></li>
+                <li><a href="#myprojects">My Projects</a></li>
+                <li><a href="#myreports">Reports</a></li>
             </ul>
         </div>
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
             <div class="row">
-                <div class="col-sm-12 col-md-6 dash_short_list">
+                <div class="col-sm-12 col-md-6 dash_short_list" id="mytasks">
                     <h3 class="page-header">My Tasks</h3>
                     {% include "includes/tasks_list.html" with items=tasks%}
                 </div>
 
-                <div class="col-sm-12 col-md-6 dash_short_list">
+                <div class="col-sm-12 col-md-6 dash_short_list" id="myprojects">
                     <h3 class="page-header">My Projects</h3>
                     {% include "includes/projects_list.html" with items=projects%}
                 </div>
             </div>
             <div class="row">
-                <div class="col-sm-12 col-md-12">
+                <div class="col-sm-12 col-md-12" id="myreports">
                     <h3 class="page-header">Reports</h3>
                     <div id="activity_chart"></div>
                 </div>

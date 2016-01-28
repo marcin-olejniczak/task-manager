@@ -35,3 +35,13 @@ var homepage = (function(){
     google.load('visualization', '1.0', {'packages':['calendar'], 'language': 'eng'});
     google.setOnLoadCallback(initActivityChart);
 })();
+
+var gui = (function(){
+    window.onhashchange = function(){
+        $(".nav-sidebar li").removeClass('active');
+        var hash = window.location.hash;
+        hash = ( hash == "")? '#' : hash;
+        var active = ".nav-sidebar li a[href='"+ hash +"']";
+        $(active).parents('li').addClass('active')
+    };
+})();
