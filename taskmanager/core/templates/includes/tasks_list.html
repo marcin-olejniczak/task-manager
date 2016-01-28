@@ -5,10 +5,10 @@
         <p class="list-group-item-text">{{ item.description }}</p>
         <div class="row">
             <ul class="list-inline col-md-12 item-properties">
-                <li class="col-md-6"><em>Priority:</em></li>
-                <li class="col-md-6"><em>Author:</em></li>
-                <li class="col-md-6"><em>End Date:</em></li>
-                <li class="col-md-6"><em>Project:</em></li>
+                <li class="col-md-6"><em>Priority:</em> {{ item.priority }}</li>
+                <li class="col-md-6"><em>Author:</em> {{ item.author.username }}</li>
+                <li class="col-md-6"><em>End Date:</em> {{ item.end_date }}</li>
+                <li class="col-md-6"><em>Project:</em> {{ item.project.title }}</li>
             </ul>
         </div>
     </a>

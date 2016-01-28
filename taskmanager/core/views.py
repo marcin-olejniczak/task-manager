@@ -1,10 +1,11 @@
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.core import serializers
 from django.shortcuts import (
     redirect, render_to_response, RequestContext,
 )
-
 from .forms import LoginForm
+from .models import *
 
 
 def login_user(request):
@@ -38,19 +39,26 @@ def logout_user(request):
 
 @login_required
 def home(request):
-    task1 = {
-        'title': 'Something very important',
-        'author': 'John K',
-        'description': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed bibendum a dui vel accumsan. Sed vel purus et nunc vehicula ultrices.',
-        'priority': 'normal',
-        'end_date': '2016-01-27',
-    }
-    tasks = [task1, task1, task1, task1, task1]
-    project1 = {
-        'title': 'Test 1',
-        'description': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed bibendum a dui vel accumsan. Sed vel purus et nunc vehicula ultrices.',
-    }
-    projects = [project1, project1, project1, project1, project1,]
+    """
+    Home view, displays dashboard with some basic info about tasks,
+    projects and user activities.
+    :param request:
+    :return:
+    """
+    user = User.objects.filter(pk=request.user.id)
+
+    tasks = Task.objects.filter(
+        assignee__user=user,
+    ).order_by(
+        '-end_date'
+    )[:5]
+
+    projects = Project.objects.filter(
+        members__user=user,
+    ).order_by(
+        '-end_date',
+    )[:5]
+
     return render_to_response(
         'home.html',
         {

@@ -4,14 +4,15 @@ var homepage = (function(){
         dataTable.addColumn({ type: 'date', id: 'Date' });
         dataTable.addColumn({ type: 'number', id: 'Won/Loss' });
         dataTable.addRows([
-            [ new Date(2012, 9, 4), 1 ],
-            [ new Date(2013, 9, 5), 3 ],
-            [ new Date(2013, 9, 12), 5 ],
-            [ new Date(2013, 9, 13), 10 ],
-            [ new Date(2013, 9, 19), 2 ],
-            [ new Date(2013, 9, 23), 5 ],
-            [ new Date(2013, 9, 24), 1 ],
-            [ new Date(2013, 9, 30), 6 ]
+            [ new Date(2015, 9, 4), 1 ],
+            [ new Date(2015, 9, 5), 3 ],
+            [ new Date(2015, 9, 12), 5 ],
+            [ new Date(2015, 9, 13), 10 ],
+            [ new Date(2015, 9, 19), 2 ],
+            [ new Date(2015, 9, 23), 5 ],
+            [ new Date(2016, 0, 24), 1 ],
+            [ new Date(2016, 0, 30), 6],
+            [ new Date(2016, 0, 30), 9 ]
         ]);
 
        var chart = new google.visualization.Calendar(document.getElementById('activity_chart'));

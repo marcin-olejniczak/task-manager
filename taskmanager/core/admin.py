@@ -19,8 +19,8 @@ class CommentAdmin(admin.ModelAdmin):
 
 
 class ProjectAdmin(admin.ModelAdmin):
-    list_display = ('name',)
-    search_fields = ['name']
+    list_display = ('title',)
+    search_fields = ['title']
 
 
 class ProjectMemberAdmin(admin.ModelAdmin):

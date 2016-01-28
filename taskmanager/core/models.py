@@ -12,18 +12,29 @@ class BaseModel(models.Model):
 
 class Task(BaseModel):
     PRIORITY_CHOICES = (
-        (0, 'Low'),
-        (1, 'Normal'),
-        (2, 'High'),
-        (3, 'Urgent'),
+        ('low', 'Low'),
+        ('normal', 'Normal'),
+        ('high', 'High'),
+        ('urgent', 'Urgent'),
+    )
+    STATUS_CHOICES = (
+        ('new', 'New'),
+        ('closed', 'Closed'),
+        ('feedback', 'Feedback'),
+        ('in_progress', 'In Progress'),
     )
     author = models.ForeignKey(User,)
     assignee = models.ForeignKey(User, related_name='assignee_user',)
     description = models.TextField()
     end_date = models.DateField()
     priority = models.CharField(
-        default=1,
+        default='normal',
         choices=PRIORITY_CHOICES,
+        max_length=30,
+    )
+    status = models.CharField(
+        default='new',
+        choices=STATUS_CHOICES,
         max_length=30,
     )
     project = models.ForeignKey('Project',)
@@ -42,6 +53,9 @@ class UserProfile(BaseModel):
     role = models.ForeignKey(Role)
     user = models.OneToOneField(User, on_delete=models.CASCADE,)
 
+    def __unicode__(self):
+        return self.user.username
+
 
 class Project(BaseModel):
     description = models.TextField()
@@ -51,11 +65,11 @@ class Project(BaseModel):
         through='ProjectMember',
         through_fields=('project', 'user'),
     )
-    name = models.TextField()
     start_date = models.DateField()
+    title = models.TextField()
 
     def __unicode__(self):
-        return self.name
+        return self.title
 
 
 class ProjectMember(BaseModel):
@@ -64,15 +78,24 @@ class ProjectMember(BaseModel):
     is_author = models.BooleanField(" Is author of project?", default=False,)
 
     def get_user_login(self):
-        return self.user.name
+        return self.user.username
 
     def get_project_name(self):
-        return self.project.name
+        return self.project.title
+
+    def __unicode__(self):
+        return self.user.username
+
+    class Meta:
+        unique_together = ('user', 'project')
 
 
 class Change(BaseModel):
     author = models.ForeignKey(User)
     task = models.ForeignKey(Task)
+
+    def __unicode__(self):
+        return self.task.title
 
 
 class ChangeDetail(BaseModel):
@@ -81,8 +104,14 @@ class ChangeDetail(BaseModel):
     new_value = models.TextField()
     old_value = models.TextField()
 
+    def __unicode__(self):
+        return self.change.task.title
+
 
 class Comment(BaseModel):
     author = models.ForeignKey(User)
     task = models.ForeignKey(Task)
     text = models.TextField()
+
+    def __unicode__(self):
+        return self.task.title
