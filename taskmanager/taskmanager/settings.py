@@ -52,6 +52,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    'core.middleware.RequireLoginMiddleware',
 )
 
 ROOT_URLCONF = 'taskmanager.urls'
@@ -109,4 +110,11 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-LOGIN_URL = 'login/'
+LOGIN_URL = '/login/'
+
+LOGIN_REQUIRED_URLS = (
+    r'(.*)$',
+)
+LOGIN_REQUIRED_URLS_EXCEPTIONS = (
+    r'/login(.*)$',
+)

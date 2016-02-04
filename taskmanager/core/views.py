@@ -1,11 +1,11 @@
 from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.decorators import login_required
 from django.core import serializers
 from django.shortcuts import (
     redirect, render_to_response, RequestContext,
 )
+from django.views.generic.edit import CreateView, UpdateView
 from .forms import LoginForm
-from .models import *
+from .models import Comment, Task, User, Project
 
 
 def login_user(request):
@@ -37,7 +37,6 @@ def logout_user(request):
     return redirect('login_user')
 
 
-@login_required
 def home(request):
     """
     Home view, displays dashboard with some basic info about tasks,
@@ -70,7 +69,6 @@ def home(request):
     )
 
 
-@login_required
 def project_edit(request, id=None):
     """
     View allows user to create or edit project
@@ -89,7 +87,6 @@ def project_edit(request, id=None):
     )
 
 
-@login_required
 def project(request, id=None):
     """
     View allows user to see details about project
@@ -111,42 +108,18 @@ def project(request, id=None):
     )
 
 
-@login_required
-def task_edit(request, id=None):
-    """
-    View allows user to create or edit project
-    :param request:
-    :return:
-    """
-    project_form = {}
+class ProtectedUpdateView(UpdateView):
 
-    return render_to_response(
-        'task.html',
-        {
-            'form': project_form,
-            'active_tab': 'task',
-        },
-        context_instance=RequestContext(request),
-    )
+    def dispatch(self, *args, **kwargs):
+        return super(ProtectedUpdateView, self).dispatch(*args, **kwargs)
 
 
-@login_required
-def task(request, id):
-    """
-    View allows user to see details about project
-    :param request:
-    :param id:
-    :return:
-    """
-    task = {
-        'id': id,
-    }
+class TaskUpdate(ProtectedUpdateView):
+    model = Task
+    template_name_suffix = '_update_form'
+    fields = ['title', 'project']
 
-    return render_to_response(
-        'task_edit.html',
-        {
-            'task': task,
-            'active_tab': 'task',
-        },
-        context_instance=RequestContext(request),
-    )
+
+class TaskCreate(CreateView):
+    model = Task
+    fields = ['title']

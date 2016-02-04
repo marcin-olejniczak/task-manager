@@ -18,13 +18,13 @@
             </a>
         </li>
         <li class="{% if active_tab == 'project' %}active{% endif %}">
-            <a href="project/">
+            <a href="{% url 'project' %}">
                 <span class="glyphicon glyphicon-list-alt"></span>
                 Projects
             </a>
         </li>
         <li class="{% if active_tab == 'task' %}active{% endif %}">
-            <a href="task/">
+            <a href="{% url 'task' %}">
                 <span class="glyphicon glyphicon-tasks"></span>
                 Tasks
             </a>
