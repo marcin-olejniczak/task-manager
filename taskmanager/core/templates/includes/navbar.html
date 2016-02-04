@@ -17,14 +17,14 @@
                 Home
             </a>
         </li>
-        <li>
-            <a href="#">
+        <li class="{% if active_tab == 'project' %}active{% endif %}">
+            <a href="project/">
                 <span class="glyphicon glyphicon-list-alt"></span>
                 Projects
             </a>
         </li>
-        <li>
-            <a href="#">
+        <li class="{% if active_tab == 'task' %}active{% endif %}">
+            <a href="task/">
                 <span class="glyphicon glyphicon-tasks"></span>
                 Tasks
             </a>

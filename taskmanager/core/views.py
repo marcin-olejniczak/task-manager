@@ -68,3 +68,85 @@ def home(request):
         },
         context_instance=RequestContext(request),
     )
+
+
+@login_required
+def project_edit(request, id=None):
+    """
+    View allows user to create or edit project
+    :param request:
+    :return:
+    """
+    project_form = {}
+
+    return render_to_response(
+        'project_edit.html',
+        {
+            'form': project_form,
+            'active_tab': 'project',
+        },
+        context_instance=RequestContext(request),
+    )
+
+
+@login_required
+def project(request, id=None):
+    """
+    View allows user to see details about project
+    :param request:
+    :param id:
+    :return:
+    """
+    project = {
+        'id': id,
+    }
+
+    return render_to_response(
+        'project.html',
+        {
+            'project': project,
+            'active_tab': 'project',
+        },
+        context_instance=RequestContext(request),
+    )
+
+
+@login_required
+def task_edit(request, id=None):
+    """
+    View allows user to create or edit project
+    :param request:
+    :return:
+    """
+    project_form = {}
+
+    return render_to_response(
+        'task.html',
+        {
+            'form': project_form,
+            'active_tab': 'task',
+        },
+        context_instance=RequestContext(request),
+    )
+
+
+@login_required
+def task(request, id):
+    """
+    View allows user to see details about project
+    :param request:
+    :param id:
+    :return:
+    """
+    task = {
+        'id': id,
+    }
+
+    return render_to_response(
+        'task_edit.html',
+        {
+            'task': task,
+            'active_tab': 'task',
+        },
+        context_instance=RequestContext(request),
+    )
