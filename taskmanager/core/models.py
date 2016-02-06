@@ -1,3 +1,4 @@
+from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
 from django.db import models
 
@@ -39,7 +40,10 @@ class Task(BaseModel):
     )
     project = models.ForeignKey('Project',)
     start_date = models.DateField()
-    title = models.TextField()
+    title = models.CharField(max_length=255,)
+
+    def get_absolute_url(self):
+        return reverse('task_update', kwargs={'pk': self.pk})
 
 
 class Role(BaseModel):
@@ -66,10 +70,13 @@ class Project(BaseModel):
         through_fields=('project', 'user'),
     )
     start_date = models.DateField()
-    title = models.TextField()
+    title = models.CharField(max_length=255,)
 
     def __unicode__(self):
         return self.title
+
+    def get_absolute_url(self):
+        return reverse('project_update', kwargs={'pk': self.pk})
 
 
 class ProjectMember(BaseModel):

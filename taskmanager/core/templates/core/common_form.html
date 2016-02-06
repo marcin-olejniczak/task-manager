@@ -1,0 +1,33 @@
+{% extends 'base_top_navbar.html' %}
+{% load add_css %}
+{% load field_type %}
+{% block content %}
+<div class="row">
+    <div class="container col-md-10 col-md-offset-1 col-sm-12" >
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title">{{ header }}</h3>
+            </div>
+            <form action="" method="post">
+                <div class="panel-body">
+                    {% csrf_token %}
+                    {% for field in form %}
+                    <fieldset class="form-group {{ field|field_type|lower }}">
+                        {{ field.errors }}
+                        {{ field.label_tag }} {{ field|add_css:"form-control" }}
+                    </fieldset>
+                    {% endfor %}
+                </div>
+                <div class="panel-footer">
+                    <p class="text-right">
+                        <button class="btn btn-default" onclick="window.history.back()">
+                            Cancel
+                        </button>
+                        <input type="submit"  class="btn btn-primary" value="Submit" />
+                    </p>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

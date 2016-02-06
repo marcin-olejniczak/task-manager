@@ -13,3 +13,13 @@
   overflow: auto;
   overflow-y: hidden;
 }
+.panel {
+  margin-top: 20px;
+  fieldset.select, fieldset.dateinput {
+    float: left;
+    width: 33%;
+    select, input {
+      width: 90%;
+    }
+  }
+}

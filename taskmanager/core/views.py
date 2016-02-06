@@ -48,15 +48,11 @@ def home(request):
 
     tasks = Task.objects.filter(
         assignee__user=user,
-    ).order_by(
-        '-end_date'
-    )[:5]
+    ).order_by('-end_date')[:5]
 
     projects = Project.objects.filter(
         members__user=user,
-    ).order_by(
-        '-end_date',
-    )[:5]
+    ).order_by('-end_date')[:5]
 
     return render_to_response(
         'home.html',
@@ -108,18 +104,77 @@ def project(request, id=None):
     )
 
 
-class ProtectedUpdateView(UpdateView):
+def task(request, id=None):
+    """
+    View allows user to see details about project
+    :param request:
+    :param id:
+    :return:
+    """
+    task = {
+        'id': id,
+    }
+
+    return render_to_response(
+        'task.html',
+        {
+            'task': task,
+            'active_tab': 'task',
+        },
+        context_instance=RequestContext(request),
+    )
+
+
+class BaseFormView(object):
+    template_name = 'core/common_form.html'
+    context_variables = {}
+
+    def get_context_data(self, **kwargs):
+        context = super(BaseFormView, self).get_context_data(**kwargs)
+        context.update(self.context_variables)
+        return context
 
     def dispatch(self, *args, **kwargs):
-        return super(ProtectedUpdateView, self).dispatch(*args, **kwargs)
+        return super(BaseFormView, self).dispatch(*args, **kwargs)
 
 
-class TaskUpdate(ProtectedUpdateView):
+class TaskGenericView(BaseFormView):
     model = Task
-    template_name_suffix = '_update_form'
-    fields = ['title', 'project']
+    fields = [
+        'title', 'description',
+        'start_date', 'end_date', 'author',
+        'assignee', 'project', 'priority',
+        'status',
+    ]
 
 
-class TaskCreate(CreateView):
-    model = Task
-    fields = ['title']
+class TaskUpdate(TaskGenericView, UpdateView):
+    context_variables = {
+        'header': 'Update Task'
+    }
+
+
+class TaskCreate(TaskGenericView, CreateView):
+    context_variables = {
+        'header': 'Create Task'
+    }
+
+
+class ProjectGenericView(BaseFormView):
+    model = Project
+    fields = [
+        'title', 'description', 'end_date',
+        'start_date',
+    ]
+
+
+class ProjectUpdate(ProjectGenericView, UpdateView):
+    context_variables = {
+        'header': 'Update Project'
+    }
+
+
+class ProjectCreate(ProjectGenericView, CreateView):
+    context_variables = {
+        'header': 'Create Project'
+    }

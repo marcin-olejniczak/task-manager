@@ -10,4 +10,12 @@
   overflow: auto;
   overflow-y: hidden; }
 
+.panel {
+  margin-top: 20px; }
+  .panel fieldset.select, .panel fieldset.dateinput {
+    float: left;
+    width: 33%; }
+    .panel fieldset.select select, .panel fieldset.select input, .panel fieldset.dateinput select, .panel fieldset.dateinput input {
+      width: 90%; }
+
 /*# sourceMappingURL=style.css.map */
