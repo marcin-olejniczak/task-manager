@@ -1,14 +1,14 @@
 <div class="list-group">
 {% for item in items %}
-    <a href="{% url 'task_update' item.id %}" class="list-group-item">
+    <a href="{% url 'task_preview' item.id %}" class="list-group-item">
         <h4 class="list-group-item-heading">{{ item.title }}</h4>
         <p class="list-group-item-text">{{ item.description }}</p>
         <div class="row">
             <ul class="list-inline col-md-12 item-properties">
-                <li class="col-md-6"><em>Priority:</em> {{ item.priority }}</li>
-                <li class="col-md-6"><em>Author:</em> {{ item.author.username }}</li>
-                <li class="col-md-6"><em>End Date:</em> {{ item.end_date }}</li>
-                <li class="col-md-6"><em>Project:</em> {{ item.project.title }}</li>
+                <li class="col-md-6"><strong>Priority:</strong> {{ item.priority }}</li>
+                <li class="col-md-6"><strong>Author:</strong> {{ item.author.username }}</li>
+                <li class="col-md-6"><strong>End Date:</strong> {{ item.end_date }}</li>
+                <li class="col-md-6"><strong>Project:</strong> {{ item.project.title }}</li>
             </ul>
         </div>
     </a>

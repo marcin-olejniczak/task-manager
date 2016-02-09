@@ -43,7 +43,7 @@ class Task(BaseModel):
     title = models.CharField(max_length=255,)
 
     def get_absolute_url(self):
-        return reverse('task_update', kwargs={'pk': self.pk})
+        return reverse('task_preview', kwargs={'pk': self.pk})
 
 
 class Role(BaseModel):
@@ -68,6 +68,7 @@ class Project(BaseModel):
         User,
         through='ProjectMember',
         through_fields=('project', 'user'),
+        blank=True,
     )
     start_date = models.DateField()
     title = models.CharField(max_length=255,)
@@ -76,7 +77,7 @@ class Project(BaseModel):
         return self.title
 
     def get_absolute_url(self):
-        return reverse('project_update', kwargs={'pk': self.pk})
+        return reverse('project_preview', kwargs={'pk': self.pk})
 
 
 class ProjectMember(BaseModel):

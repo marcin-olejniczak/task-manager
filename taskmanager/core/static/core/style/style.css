@@ -17,5 +17,12 @@
     width: 33%; }
     .panel fieldset.select select, .panel fieldset.select input, .panel fieldset.dateinput select, .panel fieldset.dateinput input {
       width: 90%; }
+  .panel .panel-body .well {
+    width: 100%;
+    margin: 0 auto;
+    height: auto;
+    overflow: hidden; }
+    .panel .panel-body .well li {
+      padding: 5px; }
 
 /*# sourceMappingURL=style.css.map */

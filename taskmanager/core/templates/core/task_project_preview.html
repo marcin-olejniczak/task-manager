@@ -1,0 +1,79 @@
+{% extends 'base_top_navbar.html' %}
+{% load add_css %}
+{% load field_type %}
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="container col-md-10 col-md-offset-1 col-sm-12" >
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                        <h3 class="panel-title">
+                            {% if task_object %}
+                                <a href="/project/preview/{{ task_object.project.id }}">
+                                    {{ task_object.project.title }}
+                                </a>
+                                /
+                                <a href="{{ request.path }}">
+                                    {{ task_object.title }}
+                                </a>
+                            {% else %}
+                                Project
+                            {% endif %}
+                        </h3>
+                </div>
+                <div class="panel-body">
+                    <h3>{{ object.title }}</h3>
+                    <p>{{ object.description }}</p>
+                    <div class="well well-sm row">
+                        {% if task_object %}
+                        <dl class="dl-horizontal col-sm-4">
+                            <dt>Author:</dt>
+                            <dd>{{ object.author.username }}</dd>
+                            <dt>Status:</dt>
+                            <dd>{{ object.status }}</dd>
+                        </dl>
+                        <dl class="dl-horizontal col-sm-4">
+                            <dt>Assignee:</dt>
+                            <dd>{{ object.assignee.username }}</dd>
+                            <dt>Priority:</dt>
+                            <dd>{{ object.priority }}</dd>
+                        </dl>
+                        {% endif %}
+                        <dl class="dl-horizontal col-sm-4">
+                            <dt>End Date:</dt>
+                            <dd>{{ object.end_date|date }}</dd>
+                            <dt>Start Date:</dt>
+                            <dd>{{ object.start_date }}</dd>
+                        </dl>
+                    </div>
+                    {% if project_object %}
+                        <h3 class="page-header">Members</h3>
+                        <ul class="list-group col-sm-6">
+                        {% for member in project_object.members.all %}
+                                <li class="list-group-item">
+                                {{ member.first_name }} {{ member.last_name }}, {{ member.username }}
+                                    {% if member in project_authors %}
+                                    <span class="badge">
+                                        Autor
+                                    </span>
+                                    {% endif %}
+                                </li>
+                        {% endfor %}
+                        </ul>
+                    {% endif %}
+                </div>
+                <div class="panel-footer text-right">
+                    <button class="btn btn-default" onclick="window.history.back()">
+                        Back
+                    </button>
+                    {% if task_object %}
+                        <a class="btn btn-primary" href="{% url 'task_update' object.id %}">Update</a>
+                    {% else %}
+                        <a class="btn btn-primary" href="{% url 'project_update' object.id %}">Update</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -3,9 +3,10 @@ from django.core import serializers
 from django.shortcuts import (
     redirect, render_to_response, RequestContext,
 )
-from django.views.generic.edit import CreateView, UpdateView
+from django.views.generic.detail import DetailView
+from django.views.generic.edit import CreateView, ModelFormMixin, UpdateView
 from .forms import LoginForm
-from .models import Comment, Task, User, Project
+from .models import Comment, Task, User, Project, ProjectMember
 
 
 def login_user(request):
@@ -129,9 +130,17 @@ class BaseFormView(object):
     template_name = 'core/common_form.html'
     context_variables = {}
 
+    def __init__(self, *args, **kwargs):
+        if hasattr(self, 'global_variables'):
+            self.global_context_variables.update(self.context_variables)
+        else:
+            self.global_context_variables = self.context_variables
+
+        super(BaseFormView, self).__init__(*args, **kwargs)
+
     def get_context_data(self, **kwargs):
         context = super(BaseFormView, self).get_context_data(**kwargs)
-        context.update(self.context_variables)
+        context.update(self.global_context_variables)
         return context
 
     def dispatch(self, *args, **kwargs):
@@ -148,33 +157,80 @@ class TaskGenericView(BaseFormView):
     ]
 
 
-class TaskUpdate(TaskGenericView, UpdateView):
+class TaskUpdateView(TaskGenericView, UpdateView):
     context_variables = {
-        'header': 'Update Task'
+        'form_title': 'Update Task'
     }
 
 
-class TaskCreate(TaskGenericView, CreateView):
+class TaskCreateView(TaskGenericView, CreateView):
     context_variables = {
-        'header': 'Create Task'
+        'form_title': 'Create Task'
     }
+
+
+class TaskPreviewView(TaskGenericView, DetailView):
+    context_object_name = 'task_object'
+    template_name = 'core/task_project_preview.html'
 
 
 class ProjectGenericView(BaseFormView):
     model = Project
     fields = [
         'title', 'description', 'end_date',
-        'start_date',
+        'start_date', 'members'
     ]
+    context_variables = {}
+
+    def dispatch(self, *args, **kwargs):
+        id = kwargs['pk']
+        project_members = ProjectMember.objects.filter(
+            project__id=id,
+        ).filter(
+            is_author=True,
+        )
+        authors = [mem.user for mem in project_members]
+        self.context_variables.update({
+            'project_authors': authors,
+        })
+
+        return super(ProjectGenericView, self).dispatch(*args, **kwargs)
+
+    def form_valid(self, form):
+        project_obj = form.save(commit=False)
+        form_members = list(form.cleaned_data['members'])
+        authors = [self.request.user.id]
+        if self.request.user not in form_members:
+            form_members.append(self.request.user)
+
+        for member in form_members:
+            ProjectMember.objects.update_or_create(
+                project=project_obj,
+                user=member,
+                is_author=True if member.id in authors else False,
+            )
+        ProjectMember.objects.filter(
+            project=project_obj,
+        ).exclude(
+            user__in=form_members,
+        ).delete()
+
+        return super(ModelFormMixin, self).form_valid(form)
 
 
-class ProjectUpdate(ProjectGenericView, UpdateView):
+class ProjectUpdateView(ProjectGenericView, UpdateView):
     context_variables = {
-        'header': 'Update Project'
+        'form_title': 'Update Project'
     }
 
 
-class ProjectCreate(ProjectGenericView, CreateView):
+class ProjectCreateView(ProjectGenericView, CreateView):
     context_variables = {
-        'header': 'Create Project'
+        'form_title': 'Create Project'
     }
+
+
+class ProjectPreviewView(ProjectGenericView, DetailView):
+    context_object_name = 'project_object'
+    template_name = 'core/task_project_preview.html'
+

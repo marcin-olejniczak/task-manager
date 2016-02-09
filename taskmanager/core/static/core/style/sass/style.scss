@@ -22,4 +22,15 @@
       width: 90%;
     }
   }
+  .panel-body{
+    .well{
+      width: 100%;
+      margin: 0 auto;
+      height: auto;
+      overflow: hidden;
+      li{
+        padding:5px;
+      }
+    }
+  }
 }
