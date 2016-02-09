@@ -60,8 +60,8 @@ class Migration(migrations.Migration):
                 ('modified_date', models.DateTimeField(auto_now=True)),
                 ('description', models.TextField()),
                 ('end_date', models.DateField()),
-                ('name', models.TextField()),
                 ('start_date', models.DateField()),
+                ('title', models.CharField(unique=True, max_length=255)),
             ],
             options={
                 'abstract': False,
@@ -77,9 +77,6 @@ class Migration(migrations.Migration):
                 ('project', models.ForeignKey(to='core.Project')),
                 ('user', models.ForeignKey(to=settings.AUTH_USER_MODEL)),
             ],
-            options={
-                'abstract': False,
-            },
         ),
         migrations.CreateModel(
             name='Role',
@@ -87,7 +84,7 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('created_date', models.DateTimeField(auto_now_add=True)),
                 ('modified_date', models.DateTimeField(auto_now=True)),
-                ('name', models.CharField(max_length=30)),
+                ('name', models.CharField(unique=True, max_length=30)),
             ],
             options={
                 'abstract': False,
@@ -101,9 +98,10 @@ class Migration(migrations.Migration):
                 ('modified_date', models.DateTimeField(auto_now=True)),
                 ('description', models.TextField()),
                 ('end_date', models.DateField()),
-                ('priority', models.CharField(default=1, max_length=30, choices=[(0, b'Low'), (1, b'Normal'), (2, b'High'), (3, b'Urgent')])),
+                ('priority', models.CharField(default=b'normal', max_length=30, choices=[(b'low', b'Low'), (b'normal', b'Normal'), (b'high', b'High'), (b'urgent', b'Urgent')])),
+                ('status', models.CharField(default=b'new', max_length=30, choices=[(b'new', b'New'), (b'closed', b'Closed'), (b'feedback', b'Feedback'), (b'in_progress', b'In Progress')])),
                 ('start_date', models.DateField()),
-                ('title', models.TextField()),
+                ('title', models.CharField(unique=True, max_length=255)),
                 ('assignee', models.ForeignKey(related_name='assignee_user', to=settings.AUTH_USER_MODEL)),
                 ('author', models.ForeignKey(to=settings.AUTH_USER_MODEL)),
                 ('project', models.ForeignKey(to='core.Project')),
@@ -118,7 +116,6 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('created_date', models.DateTimeField(auto_now_add=True)),
                 ('modified_date', models.DateTimeField(auto_now=True)),
-                ('login', models.CharField(max_length=30)),
                 ('role', models.ForeignKey(to='core.Role')),
                 ('user', models.OneToOneField(to=settings.AUTH_USER_MODEL)),
             ],
@@ -129,7 +126,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='project',
             name='members',
-            field=models.ManyToManyField(to=settings.AUTH_USER_MODEL, through='core.ProjectMember'),
+            field=models.ManyToManyField(to=settings.AUTH_USER_MODEL, through='core.ProjectMember', blank=True),
         ),
         migrations.AddField(
             model_name='comment',
@@ -140,5 +137,9 @@ class Migration(migrations.Migration):
             model_name='change',
             name='task',
             field=models.ForeignKey(to='core.Task'),
+        ),
+        migrations.AlterUniqueTogether(
+            name='projectmember',
+            unique_together=set([('user', 'project')]),
         ),
     ]

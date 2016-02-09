@@ -40,14 +40,17 @@ class Task(BaseModel):
     )
     project = models.ForeignKey('Project',)
     start_date = models.DateField()
-    title = models.CharField(max_length=255,)
+    title = models.CharField(max_length=255, unique=True)
+
+    def __unicode__(self):
+        return self.title
 
     def get_absolute_url(self):
-        return reverse('task_preview', kwargs={'pk': self.pk})
+        return reverse('task_preview', kwargs={'pk': self.id})
 
 
 class Role(BaseModel):
-    name = models.CharField(max_length=30,)
+    name = models.CharField(max_length=30, unique=True)
 
     def __unicode__(self):
         return self.name
@@ -71,13 +74,13 @@ class Project(BaseModel):
         blank=True,
     )
     start_date = models.DateField()
-    title = models.CharField(max_length=255,)
+    title = models.CharField(max_length=255, unique=True,)
 
     def __unicode__(self):
         return self.title
 
     def get_absolute_url(self):
-        return reverse('project_preview', kwargs={'pk': self.pk})
+        return reverse('project_preview', kwargs={'pk': self.id})
 
 
 class ProjectMember(BaseModel):

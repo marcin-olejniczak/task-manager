@@ -49,15 +49,17 @@
                     {% if project_object %}
                         <h3 class="page-header">Members</h3>
                         <ul class="list-group col-sm-6">
-                        {% for member in project_object.members.all %}
+                        {% for member in project_members %}
+                            {% with member.user as user %}
                                 <li class="list-group-item">
-                                {{ member.first_name }} {{ member.last_name }}, {{ member.username }}
+                                {{ user.first_name }} {{ user.last_name }}, {{ user.username }}
                                     {% if member in project_authors %}
                                     <span class="badge">
-                                        Autor
+                                        Author
                                     </span>
                                     {% endif %}
                                 </li>
+                            {% endwith %}
                         {% endfor %}
                         </ul>
                     {% endif %}

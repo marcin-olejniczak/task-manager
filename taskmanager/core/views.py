@@ -66,24 +66,6 @@ def home(request):
     )
 
 
-def project_edit(request, id=None):
-    """
-    View allows user to create or edit project
-    :param request:
-    :return:
-    """
-    project_form = {}
-
-    return render_to_response(
-        'project_edit.html',
-        {
-            'form': project_form,
-            'active_tab': 'project',
-        },
-        context_instance=RequestContext(request),
-    )
-
-
 def project(request, id=None):
     """
     View allows user to see details about project
@@ -136,7 +118,7 @@ class BaseFormView(object):
         else:
             self.global_context_variables = self.context_variables
 
-        super(BaseFormView, self).__init__(*args, **kwargs)
+        super(BaseFormView, self).__init__(**kwargs)
 
     def get_context_data(self, **kwargs):
         context = super(BaseFormView, self).get_context_data(**kwargs)
@@ -150,10 +132,8 @@ class BaseFormView(object):
 class TaskGenericView(BaseFormView):
     model = Task
     fields = [
-        'title', 'description',
-        'start_date', 'end_date', 'author',
-        'assignee', 'project', 'priority',
-        'status',
+        'title', 'description', 'start_date', 'end_date', 'assignee',
+        'project', 'priority', 'status',
     ]
 
 
@@ -168,10 +148,23 @@ class TaskCreateView(TaskGenericView, CreateView):
         'form_title': 'Create Task'
     }
 
+    def form_valid(self, form):
+        self.object = form.save(commit=False)
+        self.object.author = self.request.user
+        self.object.save()
+
+        return super(ModelFormMixin, self).form_valid(form)
+
 
 class TaskPreviewView(TaskGenericView, DetailView):
     context_object_name = 'task_object'
     template_name = 'core/task_project_preview.html'
+    fields = [
+        'title', 'description', 'start_date', 'end_date', 'assignee',
+        'project', 'priority', 'status', 'author'
+    ]
+    def __init__(self, *args, **kwargs):
+        super(TaskGenericView, self).__init__(self, *args, **kwargs)
 
 
 class ProjectGenericView(BaseFormView):
@@ -183,37 +176,43 @@ class ProjectGenericView(BaseFormView):
     context_variables = {}
 
     def dispatch(self, *args, **kwargs):
-        id = kwargs['pk']
-        project_members = ProjectMember.objects.filter(
-            project__id=id,
-        ).filter(
-            is_author=True,
-        )
-        authors = [mem.user for mem in project_members]
-        self.context_variables.update({
-            'project_authors': authors,
-        })
+        project_id = kwargs.get('pk')
+        if project_id:
+            project_members = ProjectMember.objects.filter(
+                project__id=project_id,
+            ).order_by('-is_author')
+
+            authors = project_members.filter(
+                is_author=True,
+            )
+
+            self.context_variables.update({
+                'project_members': project_members,
+                'project_authors': authors,
+            })
 
         return super(ProjectGenericView, self).dispatch(*args, **kwargs)
 
     def form_valid(self, form):
-        project_obj = form.save(commit=False)
         form_members = list(form.cleaned_data['members'])
+        del form.cleaned_data['members']
+        self.object = form.save()
         authors = [self.request.user.id]
         if self.request.user not in form_members:
             form_members.append(self.request.user)
 
-        for member in form_members:
-            ProjectMember.objects.update_or_create(
-                project=project_obj,
-                user=member,
-                is_author=True if member.id in authors else False,
-            )
         ProjectMember.objects.filter(
-            project=project_obj,
+            project=self.object,
         ).exclude(
             user__in=form_members,
         ).delete()
+
+        for member in form_members:
+            ProjectMember.objects.update_or_create(
+                project=self.object,
+                user=member,
+                is_author=True if member.id in authors else False,
+            )
 
         return super(ModelFormMixin, self).form_valid(form)
 

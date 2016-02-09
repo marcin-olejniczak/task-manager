@@ -6,4 +6,9 @@ var gui = (function(){
         var active = ".nav-sidebar li a[href='"+ hash +"']";
         $(active).parents('li').addClass('active')
     };
+
+    $('.dateinput input').datepicker({
+        'format':'yyyy-mm-dd'
+    });
+
 })();
