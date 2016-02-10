@@ -3,6 +3,7 @@ from django.core import serializers
 from django.shortcuts import (
     redirect, render_to_response, RequestContext,
 )
+from django.http import HttpResponseForbidden
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, ModelFormMixin, UpdateView
 from .forms import LoginForm
@@ -52,7 +53,8 @@ def home(request):
     ).order_by('-end_date')[:5]
 
     projects = Project.objects.filter(
-        members__user=user,
+        project_member__user=user,
+        project_member__is_author=True,
     ).order_by('-end_date')[:5]
 
     return render_to_response(
@@ -66,43 +68,46 @@ def home(request):
     )
 
 
-def project(request, id=None):
-    """
-    View allows user to see details about project
-    :param request:
-    :param id:
-    :return:
-    """
-    project = {
-        'id': id,
-    }
+def projects(request, id=None):
+
+    projects_member = Project.objects.filter(
+        project_member__user=request.user,
+        project_member__is_author=False,
+    )
+
+    projects_author = Project.objects.filter(
+        project_member__user=request.user,
+        project_member__is_author=True,
+    )
 
     return render_to_response(
-        'project.html',
+        'projects.html',
         {
-            'project': project,
-            'active_tab': 'project',
+            'projects_member': projects_member,
+            'projects_author': projects_author,
+            'active_tab': 'projects',
         },
         context_instance=RequestContext(request),
     )
 
 
-def task(request, id=None):
-    """
-    View allows user to see details about project
-    :param request:
-    :param id:
-    :return:
-    """
-    task = {
-        'id': id,
-    }
-
+def tasks(request, id=None):
+    assigned_tasks = Task.objects.filter(
+        assignee=request.user
+    )
+    created_tasks = Task.objects.filter(
+        author=request.user
+    )
+    tracked_tasks = Task.objects.filter(
+        tracked_task__user=request.user
+    )
     return render_to_response(
-        'task.html',
+        'tasks.html',
         {
-            'task': task,
-            'active_tab': 'task',
+            'assigned_tasks': assigned_tasks,
+            'created_tasks': created_tasks,
+            'tracked_tasks': tracked_tasks,
+            'active_tab': 'tasks',
         },
         context_instance=RequestContext(request),
     )
@@ -163,6 +168,7 @@ class TaskPreviewView(TaskGenericView, DetailView):
         'title', 'description', 'start_date', 'end_date', 'assignee',
         'project', 'priority', 'status', 'author'
     ]
+
     def __init__(self, *args, **kwargs):
         super(TaskGenericView, self).__init__(self, *args, **kwargs)
 
@@ -177,6 +183,7 @@ class ProjectGenericView(BaseFormView):
 
     def dispatch(self, *args, **kwargs):
         project_id = kwargs.get('pk')
+
         if project_id:
             project_members = ProjectMember.objects.filter(
                 project__id=project_id,
@@ -221,6 +228,7 @@ class ProjectUpdateView(ProjectGenericView, UpdateView):
     context_variables = {
         'form_title': 'Update Project'
     }
+    # TODO: only members who are managers can edit
 
 
 class ProjectCreateView(ProjectGenericView, CreateView):

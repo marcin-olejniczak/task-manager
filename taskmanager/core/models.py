@@ -58,7 +58,15 @@ class Role(BaseModel):
 
 class UserProfile(BaseModel):
     role = models.ForeignKey(Role)
-    user = models.OneToOneField(User, on_delete=models.CASCADE,)
+    tracked_tasks = models.ManyToManyField(
+        Task,
+        related_name='tracked_task',
+        blank=True,
+    )
+    user = models.OneToOneField(
+        User,
+        on_delete=models.CASCADE,
+    )
 
     def __unicode__(self):
         return self.user.username
@@ -70,7 +78,6 @@ class Project(BaseModel):
     members = models.ManyToManyField(
         User,
         through='ProjectMember',
-        through_fields=('project', 'user'),
         blank=True,
     )
     start_date = models.DateField()
@@ -84,15 +91,17 @@ class Project(BaseModel):
 
 
 class ProjectMember(BaseModel):
-    project = models.ForeignKey(Project, on_delete=models.CASCADE,)
-    user = models.ForeignKey(User, on_delete=models.CASCADE,)
+    project = models.ForeignKey(
+        Project,
+        on_delete=models.CASCADE,
+        related_name='project_member',
+    )
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='project_member',
+    )
     is_author = models.BooleanField(" Is author of project?", default=False,)
-
-    def get_user_login(self):
-        return self.user.username
-
-    def get_project_name(self):
-        return self.project.title
 
     def __unicode__(self):
         return self.user.username

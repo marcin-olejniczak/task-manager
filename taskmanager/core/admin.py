@@ -26,6 +26,12 @@ class ProjectAdmin(admin.ModelAdmin):
 class ProjectMemberAdmin(admin.ModelAdmin):
     list_display = ('get_user_login', 'get_project_name')
 
+    def get_user_login(self, obj):
+        return obj.user.username
+
+    def get_project_name(self, obj):
+        return obj.project.title
+
 
 class RoleAdmin(admin.ModelAdmin):
     list_display = ('name',)

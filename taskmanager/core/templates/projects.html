@@ -1,0 +1,29 @@
+{% extends 'base_top_navbar.html' %}
+{% load staticfiles %}
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-3 col-md-2 sidebar">
+            <ul class="nav nav-sidebar">
+                <li class="active"><a href="#projects">Projects</a></li>
+                <li>
+                    <a href="{% url 'project_create' %}">
+                        <span class="glyphicon glyphicon-plus"></span>
+                        Create Project
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+                <div class="col-sm-12 col-md-6 dash_short_list" id="projects">
+                    <h3 class="page-header">Member in</h3>
+                    {% include "includes/projects_list.html" with items=projects_member %}
+                </div>
+                <div class="col-sm-12 col-md-6 dash_short_list" id="projects">
+                    <h3 class="page-header">Author in</h3>
+                    {% include "includes/projects_list.html" with items=projects_author %}
+                </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

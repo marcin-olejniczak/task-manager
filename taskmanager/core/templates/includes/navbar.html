@@ -17,14 +17,14 @@
                 Home
             </a>
         </li>
-        <li class="{% if active_tab == 'project' %}active{% endif %}">
-            <a href="{% url 'project' %}">
+        <li class="{% if active_tab == 'projects' %}active{% endif %}">
+            <a href="{% url 'projects' %}">
                 <span class="glyphicon glyphicon-list-alt"></span>
                 Projects
             </a>
         </li>
-        <li class="{% if active_tab == 'task' %}active{% endif %}">
-            <a href="{% url 'task' %}">
+        <li class="{% if active_tab == 'tasks' %}active{% endif %}">
+            <a href="{% url 'tasks' %}">
                 <span class="glyphicon glyphicon-tasks"></span>
                 Tasks
             </a>

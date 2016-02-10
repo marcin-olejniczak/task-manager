@@ -8,7 +8,7 @@ urlpatterns = [
     url(r'^login/$', 'core.views.login_user', name='login_user'),
     url(r'^logout/$', 'core.views.logout_user', name='logout_user'),
     url(r'^$', 'core.views.home', name='home'),
-    url(r'^project/$', 'core.views.project', name='project'),
+    url(r'^projects/$', 'core.views.projects', name='projects'),
     url(r'^project/add/$', ProjectCreateView.as_view(), name='project_create'),
     url(
         r'^project/update/(?P<pk>[0-9]+)$',
@@ -20,7 +20,7 @@ urlpatterns = [
         ProjectPreviewView.as_view(),
         name='project_preview'
     ),
-    url(r'^task/$', 'core.views.task', name='task'),
+    url(r'^tasks/$', 'core.views.tasks', name='tasks'),
     url(r'^task/add/$', TaskCreateView.as_view(), name='task_create'),
     url(
         r'^task/update/(?P<pk>[0-9]+)$',

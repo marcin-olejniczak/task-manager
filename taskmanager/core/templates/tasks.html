@@ -1,0 +1,37 @@
+{% extends 'base_top_navbar.html' %}
+{% load staticfiles %}
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-3 col-md-2 sidebar">
+            <ul class="nav nav-sidebar">
+                <li class="active">
+                    <a href="#">
+                        Tasks
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'task_create' %}">
+                        <span class="glyphicon glyphicon-plus"></span>
+                        Create Task
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+            <div class="col-sm-12 col-md-6 dash_short_list" id="mytasks">
+                <h3 class="page-header">Assigned</h3>
+                {% include "includes/tasks_list.html" with items=assigned_tasks%}
+            </div>
+            <div class="col-sm-12 col-md-6 dash_short_list" id="mytasks">
+                <h3 class="page-header">Created</h3>
+                {% include "includes/tasks_list.html" with items=created_tasks%}
+            </div>
+            <div class="col-sm-12 col-md-6 dash_short_list" id="mytasks">
+                <h3 class="page-header">Watched</h3>
+                {% include "includes/tasks_list.html" with items=tracked_tasks%}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
