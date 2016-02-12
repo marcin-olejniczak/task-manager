@@ -32,4 +32,5 @@ urlpatterns = [
         TaskPreviewView.as_view(),
         name='task_preview'
     ),
+    url(r'^api/', include('core.api_urls')),
 ]

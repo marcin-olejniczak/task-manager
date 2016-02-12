@@ -1,6 +1,7 @@
 {% extends 'base_top_navbar.html' %}
 {% load add_css %}
 {% load field_type %}
+{% load staticfiles %}
 {% block content %}
 <div class="container-fluid">
     <div class="row">
@@ -69,6 +70,14 @@
                         Back
                     </button>
                     {% if task_object %}
+                        <a id="track_btn" class="btn btn-primary" href="{% url 'task_toggle_tracking' task_object.id  %}">
+                            {% if tracked %}
+                                <span class="glyphicon glyphicon-eye-open"></span>
+                            {% else %}
+                                <span class="glyphicon glyphicon-eye-close"></span>
+                            {% endif %}
+                        </a>
+                        </a>
                         <a class="btn btn-primary" href="{% url 'task_update' object.id %}">Update</a>
                     {% else %}
                         <a class="btn btn-primary" href="{% url 'project_update' object.id %}">Update</a>
@@ -78,4 +87,5 @@
         </div>
     </div>
 </div>
+<script src="{% static '/static/core/js/preview.js' %}"></script>
 {% endblock %}

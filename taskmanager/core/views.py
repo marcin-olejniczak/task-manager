@@ -6,8 +6,9 @@ from django.shortcuts import (
 from django.http import HttpResponseForbidden
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, ModelFormMixin, UpdateView
+
 from .forms import LoginForm
-from .models import Comment, Task, User, Project, ProjectMember
+from .models import Comment, Task, User, Project, ProjectMember, UserProfile
 
 
 def login_user(request):
@@ -99,7 +100,7 @@ def tasks(request, id=None):
         author=request.user
     )
     tracked_tasks = Task.objects.filter(
-        tracked_task__user=request.user
+        tracked_tasks__user=request.user
     )
     return render_to_response(
         'tasks.html',
@@ -168,6 +169,19 @@ class TaskPreviewView(TaskGenericView, DetailView):
         'title', 'description', 'start_date', 'end_date', 'assignee',
         'project', 'priority', 'status', 'author'
     ]
+
+    def get_context_data(self, **kwargs):
+        tracked_tasks = Task.objects.filter(
+            tracked_tasks__user=self.request.user,
+        )
+        context = super(TaskPreviewView, self).get_context_data(**kwargs)
+        context.update(
+            {
+                'tracked': self.object in tracked_tasks,
+            }
+        )
+
+        return context
 
     def __init__(self, *args, **kwargs):
         super(TaskGenericView, self).__init__(self, *args, **kwargs)

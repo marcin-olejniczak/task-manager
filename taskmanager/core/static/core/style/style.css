@@ -25,4 +25,12 @@
     .panel .panel-body .well li {
       padding: 5px; }
 
+#track_btn.loading {
+  background-image: url("/static/core/img/loading.png");
+  background-position: center center;
+  background-size: 50px; }
+  #track_btn.loading span {
+    background: transparent;
+    color: transparent; }
+
 /*# sourceMappingURL=style.css.map */

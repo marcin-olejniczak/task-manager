@@ -60,7 +60,7 @@ class UserProfile(BaseModel):
     role = models.ForeignKey(Role)
     tracked_tasks = models.ManyToManyField(
         Task,
-        related_name='tracked_task',
+        related_name='tracked_tasks',
         blank=True,
     )
     user = models.OneToOneField(

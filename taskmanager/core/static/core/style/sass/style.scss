@@ -34,3 +34,13 @@
     }
   }
 }
+
+#track_btn.loading{
+  background-image: url("/static/core/img/loading.png");
+  background-position: center center;
+  background-size: 50px;
+  span{
+    background: transparent;
+    color: transparent;
+  }
+}
