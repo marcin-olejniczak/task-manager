@@ -33,14 +33,71 @@
       }
     }
   }
+  form{
+    fieldset{
+      .errorlist{
+        list-style-type: none;
+        font-weight: bold;
+        color: #4c4c4c;
+      }
+    }
+    fieldset.error{
+      input, textarea, select, iframe{
+        border: 1px solid #ff0000 !important;
+      }
+    }
+  }
 }
 
-#track_btn.loading{
+.btn.loading{
   background-image: url("/static/core/img/loading.png");
   background-position: center center;
   background-size: 50px;
+  color: transparent;
   span{
     background: transparent;
-    color: transparent;
+  }
+}
+.comments-tabs{
+  .nav-tabs{
+     li a{
+       border-bottom: none;
+     }
+  }
+  .tab-content{
+    padding: 50px 15px;
+    border: 1px solid #ddd;
+    border-top: none;
+    #comments-list{
+      .media{
+        position: relative;
+        .media-heading{
+          h5{
+            color: #555;
+            font-weight: bold;
+            margin: 5px auto 15px;
+            text-transform: uppercase;
+          }
+        }
+        .avatar{
+          width: 75px;
+          height: 75px;
+          margin-right: 10px;
+          overflow: hidden;
+          text-align: center;
+          img{
+            max-width: 75px;
+          }
+        }
+        .media-date{
+          position:absolute;
+          right: 25px;
+          top: 25px;
+          font-size:14px;
+          text-transform: uppercase;
+          font-weight: bold;
+        }
+      }
+    }
   }
 }

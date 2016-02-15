@@ -7,7 +7,7 @@ from django.http import HttpResponseForbidden
 from django.views.generic.detail import DetailView
 from django.views.generic.edit import CreateView, ModelFormMixin, UpdateView
 
-from .forms import LoginForm
+from .forms import LoginForm, CommentForm
 from .models import Comment, Task, User, Project, ProjectMember, UserProfile
 
 
@@ -174,10 +174,12 @@ class TaskPreviewView(TaskGenericView, DetailView):
         tracked_tasks = Task.objects.filter(
             tracked_tasks__user=self.request.user,
         )
+        comment_form = CommentForm(task_id=self.object.pk)
         context = super(TaskPreviewView, self).get_context_data(**kwargs)
         context.update(
             {
                 'tracked': self.object in tracked_tasks,
+                'comment_form': comment_form
             }
         )
 
@@ -254,4 +256,3 @@ class ProjectCreateView(ProjectGenericView, CreateView):
 class ProjectPreviewView(ProjectGenericView, DetailView):
     context_object_name = 'project_object'
     template_name = 'core/task_project_preview.html'
-

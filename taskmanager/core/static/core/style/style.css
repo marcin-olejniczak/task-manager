@@ -24,13 +24,48 @@
     overflow: hidden; }
     .panel .panel-body .well li {
       padding: 5px; }
+  .panel form fieldset .errorlist {
+    list-style-type: none;
+    font-weight: bold;
+    color: #4c4c4c; }
+  .panel form fieldset.error input, .panel form fieldset.error textarea, .panel form fieldset.error select, .panel form fieldset.error iframe {
+    border: 1px solid #ff0000 !important; }
 
-#track_btn.loading {
+.btn.loading {
   background-image: url("/static/core/img/loading.png");
   background-position: center center;
-  background-size: 50px; }
-  #track_btn.loading span {
-    background: transparent;
-    color: transparent; }
+  background-size: 50px;
+  color: transparent; }
+  .btn.loading span {
+    background: transparent; }
+
+.comments-tabs .nav-tabs li a {
+  border-bottom: none; }
+.comments-tabs .tab-content {
+  padding: 50px 15px;
+  border: 1px solid #ddd;
+  border-top: none; }
+  .comments-tabs .tab-content #comments-list .media {
+    position: relative; }
+    .comments-tabs .tab-content #comments-list .media .media-heading h5 {
+      color: #555;
+      font-weight: bold;
+      margin: 5px auto 15px;
+      text-transform: uppercase; }
+    .comments-tabs .tab-content #comments-list .media .avatar {
+      width: 75px;
+      height: 75px;
+      margin-right: 10px;
+      overflow: hidden;
+      text-align: center; }
+      .comments-tabs .tab-content #comments-list .media .avatar img {
+        max-width: 75px; }
+    .comments-tabs .tab-content #comments-list .media .media-date {
+      position: absolute;
+      right: 25px;
+      top: 25px;
+      font-size: 14px;
+      text-transform: uppercase;
+      font-weight: bold; }
 
 /*# sourceMappingURL=style.css.map */

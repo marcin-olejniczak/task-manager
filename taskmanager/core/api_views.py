@@ -1,6 +1,7 @@
-from django.http import HttpResponse, HttpResponseBadRequest
-
-from .models import Task, UserProfile
+from django.http import HttpResponse, HttpResponseBadRequest, JsonResponse
+from django.views.decorators.http import require_http_methods
+from .forms import CommentForm
+from .models import Task, UserProfile, Comment
 
 
 def task_toggle_tracking(request, pk):
@@ -22,3 +23,39 @@ def task_toggle_tracking(request, pk):
         return HttpResponseBadRequest()
 
     return HttpResponse()
+
+
+@require_http_methods(["POST"])
+def comment_create(request, task_id):
+    form = CommentForm(
+        request.POST,
+        task_id=task_id,
+        user=request.user,
+    )
+    if form.is_valid():
+        response_data = {
+            'result': {
+                'status': 'ok'
+            }
+        }
+        return JsonResponse(
+            data=response_data
+        )
+    else:
+        response_data = {
+            'result': {
+                'errors': form.errors
+            }
+        }
+        return JsonResponse(
+            data=response_data,
+        )
+
+
+def task_comments(request, task_id):
+    return JsonResponse(
+        {
+            'a': '1'
+        }
+    )
+

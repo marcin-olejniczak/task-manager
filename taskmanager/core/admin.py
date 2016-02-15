@@ -15,7 +15,7 @@ class ChangeDetailAdmin(admin.ModelAdmin):
 
 
 class CommentAdmin(admin.ModelAdmin):
-    list_display = ('text',)
+    list_display = ('author', 'task', 'text',)
 
 
 class ProjectAdmin(admin.ModelAdmin):
