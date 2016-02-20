@@ -2,13 +2,19 @@
 {% for item in items %}
     <a href="{% url 'task_preview' item.id %}" class="list-group-item">
         <h4 class="list-group-item-heading">{{ item.title }}</h4>
-        <p class="list-group-item-text">{{ item.description }}</p>
+        <div class="list-group-item-text">
+            {% autoescape off %}
+            {{ item.description|safe }}
+            {% endautoescape %}
+        </div>
         <div class="row">
             <ul class="list-inline col-md-12 item-properties">
                 <li class="col-md-6"><strong>Priority:</strong> {{ item.priority }}</li>
+                <li class="col-md-6"><strong>Status:</strong> {{ item.status }}</li>
                 <li class="col-md-6"><strong>Author:</strong> {{ item.author.username }}</li>
-                <li class="col-md-6"><strong>End Date:</strong> {{ item.end_date }}</li>
+                <li class="col-md-6"><strong>Assignee:</strong> {{ item.assignee.username }}</li>
                 <li class="col-md-6"><strong>Project:</strong> {{ item.project.title }}</li>
+                <li class="col-md-6"><strong>End Date:</strong> {{ item.end_date }}</li>
             </ul>
         </div>
     </a>

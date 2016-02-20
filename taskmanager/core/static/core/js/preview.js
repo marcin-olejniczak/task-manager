@@ -47,8 +47,6 @@ var gui = (function(){
         var form = comment_form_container.find('form');
         var comments_list = $('#comments-list');
 
-        form.find('textarea').wysihtml5();
-
         // Handle Comment Form
         form.on('click', 'input[type=submit]', function(e){
             e.preventDefault();
@@ -114,7 +112,6 @@ var gui = (function(){
                     )
                 }
                 var modified_date = '';
-                debugger;
                 if(com_obj.modified_date !== com_obj.created_date){
                      modified_date = new Date(com_obj.modified_date)
                          .toLocaleDateString(

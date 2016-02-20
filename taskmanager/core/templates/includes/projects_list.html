@@ -2,9 +2,12 @@
 {% for item in items %}
   <a href="{% url 'project_preview' item.id %}" class="list-group-item">
     <h4 class="list-group-item-heading">{{ item.title }}</h4>
-    <p class="list-group-item-text">{{ item.description }}</p>
+    {% autoescape off %}
+    <p class="list-group-item-text">{{ item.description|safe }}</p>
+    {% endautoescape %}
       <div class="row">
         <ul class="list-inline col-md-12 item-properties">
+            <li class="col-md-6"><strong>Start Date:</strong> {{ item.start_date }}</li>
             <li class="col-md-6"><strong>End Date:</strong> {{ item.end_date }}</li>
         </ul>
     </div>

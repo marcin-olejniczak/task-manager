@@ -41,4 +41,6 @@ var gui = (function(){
         'format':'yyyy-mm-dd'
     });
 
+    $('form textarea').wysihtml5();
+
 })();

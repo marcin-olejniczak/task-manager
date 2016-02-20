@@ -92,7 +92,7 @@ def projects(request, id=None):
     )
 
 
-def tasks(request, id=None):
+def tasks(request):
     assigned_tasks = Task.objects.filter(
         assignee=request.user
     )
@@ -108,6 +108,7 @@ def tasks(request, id=None):
             'assigned_tasks': assigned_tasks,
             'created_tasks': created_tasks,
             'tracked_tasks': tracked_tasks,
+            'all_tasks': {},
             'active_tab': 'tasks',
         },
         context_instance=RequestContext(request),

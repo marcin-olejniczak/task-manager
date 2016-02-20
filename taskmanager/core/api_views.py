@@ -29,6 +29,12 @@ def task_toggle_tracking(request, pk):
 
 @require_http_methods(["POST"])
 def comment_create(request, task_id):
+    """
+    Create comment using Ajax call
+    :param request:
+    :param task_id:
+    :return:
+    """
     form = CommentForm(
         request.POST,
         task_id=task_id,
