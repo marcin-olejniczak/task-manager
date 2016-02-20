@@ -1,5 +1,7 @@
 from django.http import HttpResponse, HttpResponseBadRequest, JsonResponse
 from django.views.decorators.http import require_http_methods
+
+from .helper import get_epoch_timestamp
 from .forms import CommentForm
 from .models import Task, UserProfile, Comment
 
@@ -55,15 +57,17 @@ def comment_create(request, task_id):
 def comments_get(request, task_id):
     comments = Comment.objects.filter(
         task__id=task_id
-    ).order_by('-created_date')
+    ).order_by('created_date')
 
     comments_data = []
     for comment in comments:
         comments_data.append({
+            'id': comment.id,
             'author': comment.author.username,
+            'is_author': True if comment.author == request.user else False,
             'text': comment.text,
-            'created_date': "{:%b. %d, %Y}".format(comment.created_date),
-            'modified_date': "{:%b. %d, %Y}".format(comment.modified_date),
+            'created_date': get_epoch_timestamp(comment.created_date),
+            'modified_date': get_epoch_timestamp(comment.modified_date),
         })
 
     response_data = {

@@ -47,6 +47,9 @@
   border-top: none; }
   .comments-tabs .tab-content #comments-list .media {
     position: relative; }
+    .comments-tabs .tab-content #comments-list .media .well {
+      overflow: hidden;
+      padding-bottom: 12px; }
     .comments-tabs .tab-content #comments-list .media .media-heading h5 {
       color: #555;
       font-weight: bold;
@@ -66,5 +69,11 @@
       top: 25px;
       font-size: 14px;
       font-weight: bold; }
+    .comments-tabs .tab-content #comments-list .media .media-last-modified {
+      font-style: italic;
+      text-align: right; }
+    .comments-tabs .tab-content #comments-list .media .action button {
+      float: right;
+      margin: 0 5px; }
 
 /*# sourceMappingURL=style.css.map */

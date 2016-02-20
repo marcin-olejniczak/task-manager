@@ -99,10 +99,33 @@ var gui = (function(){
         function displayComments(res){
             var comments = res.data.comments
             for(var i in comments){
-                var comment_obj = comments[i];
-                var avatar = (comment_obj.avatar)? comment_obj.avatar : '/static/core/img/avatar.png';
+                var com_obj = comments[i];
+                var avatar = (com_obj.avatar)? com_obj.avatar : '/static/core/img/avatar.png';
+                var buttons = '';
+                var date_formatting_options = {
+                    year: "numeric", month: "short",
+                    day: "numeric", hour: "2-digit", minute: "2-digit"
+                };
+                if(com_obj.is_author){
+                    buttons = $('<div/>').addClass('action').append(
+                        $('<button/>').addClass('btn btn-danger').text('Delete')
+                    ).append(
+                        $('<button/>').addClass('btn btn-primary').text('Edit')
+                    )
+                }
+                var modified_date = '';
+                debugger;
+                if(com_obj.modified_date !== com_obj.created_date){
+                     modified_date = new Date(com_obj.modified_date)
+                         .toLocaleDateString(
+                            "en-us",
+                            date_formatting_options
+                        )
+                        modified_date = 'Last Modified: ' + modified_date;
+                }
+
                 comments_list.append(
-                    $('<li/>').addClass('media').append(
+                    $('<li/>').addClass('media').data('id', com_obj.id).append(
                         $('<a/>').addClass('avatar pull-left').append(
                             $('<img/>').attr('src', avatar)
                         )
@@ -110,17 +133,24 @@ var gui = (function(){
                         $('<div/>').addClass('media-body').append(
                             $('<div/>').addClass('well well-lg').append(
                                 $('<div/>').addClass('media-heading').append(
-                                    $('<h5/>').text(comment_obj.author)
+                                    $('<h5/>').text(com_obj.author)
                                 )
                             ).append(
                                 $('<span/>').addClass('media-date').text(
-                                    comment_obj.created_date
+                                    new Date(com_obj.created_date).toLocaleDateString(
+                                        "en-us",
+                                        date_formatting_options
+                                    )
                                 )
                             ).append(
                                 $('<p/>').addClass('media-comment').html(
-                                    comment_obj.text
+                                    com_obj.text
                                 )
-                            )
+                            ).append(
+                                $('<p/>').addClass('media-last-modified').text(
+                                    modified_date
+                                )
+                            ).append(buttons)
                         )
                     )
                 );
@@ -135,8 +165,9 @@ var gui = (function(){
                 'json'
             ).fail(ajaxErrorH)
         }
-
-        get_comments();
+        if(window.location.href.indexOf('task/preview') > -1){
+            get_comments();
+        }
 
     })();
 })();

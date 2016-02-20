@@ -71,6 +71,10 @@
     #comments-list{
       .media{
         position: relative;
+        .well{
+          overflow: hidden;
+          padding-bottom: 12px;
+        }
         .media-heading{
           h5{
             color: #555;
@@ -95,6 +99,16 @@
           top: 25px;
           font-size:14px;
           font-weight: bold;
+        }
+        .media-last-modified{
+          font-style: italic;
+          text-align: right;
+        }
+        .action{
+           button{
+             float:right;
+             margin: 0 5px;
+           }
         }
       }
     }
