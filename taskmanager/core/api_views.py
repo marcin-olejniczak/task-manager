@@ -34,7 +34,7 @@ def comment_create(request, task_id):
     )
     if form.is_valid():
         response_data = {
-            'result': {
+            'data': {
                 'status': 'ok'
             }
         }
@@ -43,7 +43,7 @@ def comment_create(request, task_id):
         )
     else:
         response_data = {
-            'result': {
+            'data': {
                 'errors': form.errors
             }
         }
@@ -52,10 +52,25 @@ def comment_create(request, task_id):
         )
 
 
-def task_comments(request, task_id):
-    return JsonResponse(
-        {
-            'a': '1'
+def comments_get(request, task_id):
+    comments = Comment.objects.filter(
+        task__id=task_id
+    ).order_by('-created_date')
+
+    comments_data = []
+    for comment in comments:
+        comments_data.append({
+            'author': comment.author.username,
+            'text': comment.text,
+            'created_date': "{:%b. %d, %Y}".format(comment.created_date),
+            'modified_date': "{:%b. %d, %Y}".format(comment.modified_date),
+        })
+
+    response_data = {
+        'data': {
+            'comments': comments_data
         }
-    )
+    }
+    return JsonResponse(data=response_data)
+
 

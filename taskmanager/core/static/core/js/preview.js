@@ -45,6 +45,8 @@ var gui = (function(){
         // initialize WYSIWYG editor
         var comment_form_container = $('#add-comment');
         var form = comment_form_container.find('form');
+        var comments_list = $('#comments-list');
+
         form.find('textarea').wysihtml5();
 
         // Handle Comment Form
@@ -53,13 +55,14 @@ var gui = (function(){
             e.stopPropagation();
             var el = $(this);
             var url = form.attr('action');
-            var comment_text = form.find('#id_text').val();
+            var textarea = form.find('#id_text');
             function successH(res){
                 //reset added errors
                 form.find('fieldset.error').removeClass('error');
                 form.find('fieldset .errorlist').remove();
-                var errors = res.result.errors;
-                if(errors){
+                debugger;
+                if(res.data.errors){
+                    var errors = res.data.errors;
                     for (var field in errors){
                         var errorlist = $('<ul/>').addClass('errorlist');
                         for (var i in errors[field]){
@@ -74,9 +77,10 @@ var gui = (function(){
                 }else{
                     comment_form_container.find('.panel-body').append(
                         $('<p/>')
-                            .addClass('alert-success')
+                            .addClass('alert-success text-center')
                             .text('Saved')
                     );
+                    form.find('textarea').data('wysihtml5').editor.clear();
                 }
             };
 
@@ -85,11 +89,54 @@ var gui = (function(){
                 {
                     method: 'POST',
                     data: {
-                        text: comment_text,
+                        text: textarea.val(),
                     }
                 }
             ).done(successH).fail(ajaxErrorH);
         });
+
+        // Display comments
+        function displayComments(res){
+            var comments = res.data.comments
+            for(var i in comments){
+                var comment_obj = comments[i];
+                var avatar = (comment_obj.avatar)? comment_obj.avatar : '/static/core/img/avatar.png';
+                comments_list.append(
+                    $('<li/>').addClass('media').append(
+                        $('<a/>').addClass('avatar pull-left').append(
+                            $('<img/>').attr('src', avatar)
+                        )
+                    ).append(
+                        $('<div/>').addClass('media-body').append(
+                            $('<div/>').addClass('well well-lg').append(
+                                $('<div/>').addClass('media-heading').append(
+                                    $('<h5/>').text(comment_obj.author)
+                                )
+                            ).append(
+                                $('<span/>').addClass('media-date').text(
+                                    comment_obj.created_date
+                                )
+                            ).append(
+                                $('<p/>').addClass('media-comment').html(
+                                    comment_obj.text
+                                )
+                            )
+                        )
+                    )
+                );
+            }
+        }
+        // Get tasks comments
+        function get_comments(){
+            var url = '/api/comments/get/' + comments_list.attr('data-task-id');
+            $.get(
+                url,
+                displayComments,
+                'json'
+            ).fail(ajaxErrorH)
+        }
+
+        get_comments();
 
     })();
 })();

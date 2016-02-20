@@ -102,40 +102,7 @@
                     </li>
                 </ul>
                 <div class="tab-content">
-                    <ul id="comments-list" class="media-list tab-pane active">
-                        <li class="media">
-                            <a href="#" class="avatar pull-left">
-                                <img src="{% static 'core/img/avatar.png' %}" alt="">
-                            </a>
-                            <div class="media-body">
-                                <div class="well well-lg">
-                                    <div class="media-heading">
-                                        <h5>username</h5>
-                                    </div>
-                                    <span class="media-date">
-                                        02.12.2016
-                                    </span>
-                                    <p class="media-comment">TEST</p>
-                                </div>
-                            </div>
-                        </li>
-                        <li class="media">
-                            <a href="#" class="avatar pull-left">
-                                <img src="{% static 'core/img/avatar.png' %}" alt="">
-                            </a>
-                            <div class="media-body">
-                                <div class="well well-lg">
-                                    <div class="media-heading">
-                                        <h5>username</h5>
-                                    </div>
-                                    <span class="media-date">
-                                        02.12.2016
-                                    </span>
-                                    <p class="media-comment">TEST</p>
-                                </div>
-                            </div>
-                        </li>
-                    </ul>
+                    <ul id="comments-list" class="media-list tab-pane active" data-task-id="{{ task_object.id }}"></ul>
                     <div class="tab-pane" id="add-comment">
                         {% include 'core/common_form.html' with form=comment_form action='api/comment/create//' %}
                     </div>
