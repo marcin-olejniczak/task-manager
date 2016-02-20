@@ -42,7 +42,6 @@ var gui = (function(){
      * Comments list enhancements
      */
     var comments = (function(){
-        // initialize WYSIWYG editor
         var comment_form_container = $('#add-comment');
         var form = comment_form_container.find('form');
         var comments_list = $('#comments-list');

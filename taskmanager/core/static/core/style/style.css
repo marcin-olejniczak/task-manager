@@ -24,6 +24,8 @@
     overflow: hidden; }
     .panel .panel-body .well li {
       padding: 5px; }
+  .panel .panel-body .description {
+    margin: 20px auto; }
   .panel form fieldset .errorlist {
     list-style-type: none;
     font-weight: bold;

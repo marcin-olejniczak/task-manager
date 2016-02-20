@@ -25,7 +25,9 @@
                 <div class="panel-body">
                     <h3>{{ object.title }}</h3>
                     {% autoescape off %}
-                    <div>{{ object.description|safe }}</div>
+                    <div class="description">
+                        {{ object.description|safe }}
+                    </div>
                     {% endautoescape %}
                     <div class="well well-sm row">
                         {% if task_object %}
@@ -110,6 +112,10 @@
                     </div>
                 </div>
             </div>
+        {% endif %}
+        {% if project_object %}
+            <h3 class="page-header">Tasks</h3>
+            {% include "includes/tasks_list.html" with items=tasks%}
         {% endif %}
         </div>
     </div>

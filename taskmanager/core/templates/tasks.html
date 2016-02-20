@@ -6,8 +6,13 @@
         <div class="col-sm-3 col-md-2 sidebar">
             <ul class="nav nav-sidebar">
                 <li class="active">
-                    <a href="#">
-                        Tasks
+                    <a href="#mytasks">
+                        My Tasks
+                    </a>
+                </li>
+                <li>
+                    <a href="#alltasks">
+                        All tasks
                     </a>
                 </li>
                 <li>
@@ -23,13 +28,19 @@
                 <h3 class="page-header">Assigned</h3>
                 {% include "includes/tasks_list.html" with items=assigned_tasks%}
             </div>
-            <div class="col-sm-12 col-md-6 dash_short_list" id="mytasks">
+            <div class="col-sm-12 col-md-6 dash_short_list">
                 <h3 class="page-header">Created</h3>
                 {% include "includes/tasks_list.html" with items=created_tasks%}
             </div>
-            <div class="col-sm-12 col-md-6 dash_short_list" id="mytasks">
+            <div class="col-sm-12 col-md-6 dash_short_list">
                 <h3 class="page-header">Tracked</h3>
                 {% include "includes/tasks_list.html" with items=tracked_tasks%}
+            </div>
+            <div class="col-sm-12 col-md-12 dash_short_list" id="alltasks">
+                {% for name, tasks in all_tasks.iteritems %}
+                    <h3 class="page-header">{{ name }}</h3>
+                    {% include "includes/tasks_list.html" with items=tasks%}
+                {% endfor %}
             </div>
         </div>
     </div>

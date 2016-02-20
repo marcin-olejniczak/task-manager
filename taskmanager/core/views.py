@@ -94,21 +94,32 @@ def projects(request, id=None):
 
 def tasks(request):
     assigned_tasks = Task.objects.filter(
-        assignee=request.user
+        assignee=request.user,
     )
     created_tasks = Task.objects.filter(
-        author=request.user
+        author=request.user,
     )
     tracked_tasks = Task.objects.filter(
-        tracked_tasks__user=request.user
+        tracked_tasks__user=request.user,
     )
+    projects = Project.objects.filter(
+        project_member__user=request.user,
+    )
+    all_tasks = {}
+    for project in projects:
+        project_tasks = Task.objects.filter(
+            project=project,
+        )
+        if project_tasks:
+            all_tasks[project.title] = project_tasks
+
     return render_to_response(
         'tasks.html',
         {
             'assigned_tasks': assigned_tasks,
             'created_tasks': created_tasks,
             'tracked_tasks': tracked_tasks,
-            'all_tasks': {},
+            'all_tasks': all_tasks,
             'active_tab': 'tasks',
         },
         context_instance=RequestContext(request),
@@ -116,7 +127,7 @@ def tasks(request):
 
 
 class BaseFormView(object):
-    template_name = 'core/common_form.html'
+    template_name = 'core/form_view.html'
     context_variables = {}
 
     def __init__(self, *args, **kwargs):
@@ -257,3 +268,16 @@ class ProjectCreateView(ProjectGenericView, CreateView):
 class ProjectPreviewView(ProjectGenericView, DetailView):
     context_object_name = 'project_object'
     template_name = 'core/task_project_preview.html'
+
+    def get_context_data(self, **kwargs):
+        related_tasks = Task.objects.filter(
+            project=self.object
+        )
+        context = super(ProjectPreviewView, self).get_context_data(**kwargs)
+        context.update(
+            {
+                'tasks': related_tasks,
+            }
+        )
+
+        return context
