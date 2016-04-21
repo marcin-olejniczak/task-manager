@@ -1,7 +1,7 @@
 from django.contrib.auth import authenticate, login, logout
 from django.core import serializers
 from django.shortcuts import (
-    redirect, render_to_response, RequestContext,
+    redirect, render_to_response, RequestContext, HttpResponseRedirect
 )
 from django.http import HttpResponseForbidden
 from django.views.generic.detail import DetailView
@@ -12,6 +12,13 @@ from .models import Comment, Task, User, Project, ProjectMember, UserProfile
 
 
 def login_user(request):
+    """
+    Display login form, authenticate user
+    """
+    next_url = request.GET.get('next')
+    if next_url:
+        request.session['next'] = next_url
+
     login_form = LoginForm(request.POST or None)
     alert = None
 
@@ -21,6 +28,9 @@ def login_user(request):
         user = authenticate(username=username, password=password)
         if user:
             login(request, user)
+            next_url = request.session.get('next')
+            if next_url:
+                return HttpResponseRedirect(next_url)
             return redirect('home')
         else:
             alert = 'Wrong username or password'
@@ -93,23 +103,32 @@ def projects(request, id=None):
 
 
 def tasks(request):
+    """
+    Allow user to see tasks related to him
+    :param request:
+    :return:
+    """
     assigned_tasks = Task.objects.filter(
         assignee=request.user,
-    )
+    ).order_by('end_date')
+
     created_tasks = Task.objects.filter(
         author=request.user,
-    )
+    ).order_by('end_date')
+
     tracked_tasks = Task.objects.filter(
         tracked_tasks__user=request.user,
-    )
+    ).order_by('end_date')
+
     projects = Project.objects.filter(
         project_member__user=request.user,
     )
+
     all_tasks = {}
     for project in projects:
         project_tasks = Task.objects.filter(
             project=project,
-        )
+        ).order_by('end_date')
         if project_tasks:
             all_tasks[project.title] = project_tasks
 
@@ -143,9 +162,6 @@ class BaseFormView(object):
         context.update(self.global_context_variables)
         return context
 
-    def dispatch(self, *args, **kwargs):
-        return super(BaseFormView, self).dispatch(*args, **kwargs)
-
 
 class TaskGenericView(BaseFormView):
     model = Task
@@ -153,12 +169,6 @@ class TaskGenericView(BaseFormView):
         'title', 'description', 'start_date', 'end_date', 'assignee',
         'project', 'priority', 'status',
     ]
-
-
-class TaskUpdateView(TaskGenericView, UpdateView):
-    context_variables = {
-        'form_title': 'Update Task'
-    }
 
 
 class TaskCreateView(TaskGenericView, CreateView):
@@ -169,9 +179,14 @@ class TaskCreateView(TaskGenericView, CreateView):
     def form_valid(self, form):
         self.object = form.save(commit=False)
         self.object.author = self.request.user
-        self.object.save()
 
-        return super(ModelFormMixin, self).form_valid(form)
+        return super(CreateView, self).form_valid(form)
+
+
+class TaskUpdateView(TaskGenericView, UpdateView):
+    context_variables = {
+        'form_title': 'Update Task'
+    }
 
 
 class TaskPreviewView(TaskGenericView, DetailView):

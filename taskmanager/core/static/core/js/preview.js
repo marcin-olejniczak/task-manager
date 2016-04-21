@@ -15,7 +15,9 @@ var gui = (function(){
      * Preview of Task or Project
      */
     var preview = (function(){
-        // Toggle tracking Task
+        /**
+         * Toggle tracking Task
+         */
         $('body').on('click', '#track_btn', function(e){
             e.preventDefault();
             var el = $(this);
